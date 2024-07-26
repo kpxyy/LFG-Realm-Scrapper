@@ -9,10 +9,10 @@ The first ever public Xbox Looking For Group realm scrapper.
 4. The script will output a list of realm codes every 60 seconds.
 
 ## Known Issues
-- The script sometimes get words from the posts instead of realm codes, which can be ignored as the codes are vaildated using `https://open.minecraft.net/pocket/realms/invite/<code>`.
+The script sometimes get words from the posts instead of realm codes, which can be ignored as the codes are vaildated using `https://open.minecraft.net/pocket/realms/invite/<code>`.
 
 ## Special Thanks
-- [@aidgods](https://github.com/aidgods) - Giving the endpoint to view available Looking For Group posts.
+[@aidgods](https://github.com/aidgods) - Giving the endpoint to view available Looking For Group posts.
 
 ## License
 This project is licensed under the [AGPL-3.0](LICENSE) license.
