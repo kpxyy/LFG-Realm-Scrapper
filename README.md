@@ -15,7 +15,7 @@ WEBHOOK_URL=WEBHOOK URL HERE
 `
 
 ## Known Issues
-The script sometimes get words from the posts instead of realm codes, which can be ignored as the codes are vaildated using `https://open.minecraft.net/pocket/realms/invite/<code>`.
+The script sometimes get words from the posts instead of realm codes, which can be ignored as the codes are vaildated using `https://pocket.realms.minecraft.net/worlds/v1/link/<code>`.
 
 ## Special Thanks
 [@aidgods](https://github.com/aidgods) - Giving the endpoint to view available Looking For Group posts.
