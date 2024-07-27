@@ -1,4 +1,6 @@
 node_modules
 realms.json
+oldRealms.json
 package-lock.json
 auth
+.env
