@@ -9,7 +9,10 @@ The first ever public Xbox Looking For Group realm scrapper.
 5. The script will output a list of realm codes every 60 seconds.
 
 ## Webhook
-If you want to setup a webhook, which isn't required, you have to make a .env
+If you want to setup a webhook, which isn't required, you have to make a .env file including a discord webhook URL. A example is provided below.
+`
+WEBHOOK_URL=WEBHOOK URL HERE
+`
 
 ## Known Issues
 The script sometimes get words from the posts instead of realm codes, which can be ignored as the codes are vaildated using `https://open.minecraft.net/pocket/realms/invite/<code>`.
