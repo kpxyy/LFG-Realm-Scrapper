@@ -178,7 +178,7 @@ const realmCodeRegex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11}/gm;
                     }
                 }
             };
-            
+
             console.log(`[${chalk.blueBright('-')}] ${chalk.yellow('Finished Grabbing Realm Codes')}`);
         } catch (error) {
             console.log(error)
@@ -193,6 +193,8 @@ const realmCodeRegex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11}/gm;
             if (err) console.log(err);
         });
     };
+
+    fetchCodes();
 
     setInterval(() => fetchCodes(), 60000);
 })();
