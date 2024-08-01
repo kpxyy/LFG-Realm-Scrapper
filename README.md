@@ -5,8 +5,9 @@ The first ever public Xbox Looking For Group realm scrapper.
 1. Clone this repository
 2. Install the dependencies with `npm i`
 3. Make a realms.json file with a empty array.
-4. Run the script with `node .`
-5. The script will output a list of realm codes every 60 seconds.
+4. Make a invaildRealms.json file with a empty array.
+5. Run the script with `node .`
+6. The script will output a list of realm codes every 60 seconds.
 
 ## Webhook
 If you want to setup a webhook, which isn't required, you have to make a .env file including a discord webhook URL. A example is provided below.

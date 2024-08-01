@@ -1,6 +1,6 @@
 node_modules
 realms.json
-oldRealms.json
+invaildRealms.json
 package-lock.json
 auth
 .env
