@@ -192,9 +192,13 @@ const realmCodeRegex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11}/gm;
         fs.writeFileSync('invaildRealms.json', JSON.stringify(invaildRealmArray, null, 2), (err) => {
             if (err) console.log(err);
         });
+
+        return;
     };
 
     fetchCodes();
 
-    setInterval(() => fetchCodes(), 60000);
+    setInterval(async () => { 
+        await fetchCodes();
+    }, 60000);
 })();
