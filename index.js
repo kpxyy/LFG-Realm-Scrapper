@@ -1,4 +1,4 @@
-const { Authflow, Titles } = require("prismarine-auth");
+const { Authflow } = require("prismarine-auth");
 
 const fetch = require('node-fetch');
 const chalk = require('chalk');
@@ -14,24 +14,24 @@ let { WEBHOOK_URL: URL } = process.env;
 const flow = new Authflow(undefined, "./auth", {
     flow: "sisu",
     authTitle: "000000004424DA1F",
-    // You have to use this title to get access to LFG, you could use Titles.XboxAppIOS also.
     deviceType: "Win32"
 });
 
-const getXboxToken = async () => {
-    return await flow.getXboxToken()
-        .catch((err) => {
-            console.log(err);
-            process.exit(1);
-        });
-}
+const getTokens = async() => {
+    const token = await flow.getXboxToken().catch((err) => {
+        console.log(err);
+        process.exit(1);
+    });
 
-const getRealmToken = async () => {
-    return await flow.getXboxToken("https://pocket.realms.minecraft.net/")
-        .catch((err) => {
-            console.log(err);
-            process.exit(1);
-        });
+    const realmToken = await flow.getXboxToken("https://pocket.realms.minecraft.net/").catch((err) => {
+        console.log(err);
+        process.exit(1);
+    });
+
+    headers.Authorization = `XBL3.0 x=${token.userHash};${token.XSTSToken}`;
+    realm_api_headers.authorization = `XBL3.0 x=${realmToken.userHash};${realmToken.XSTSToken}`;
+
+    return;
 }
 
 function send(params) {
@@ -64,10 +64,10 @@ const realm_api_headers = {
     "Accept": "*/*",
     "authorization": "",
     "charset": "utf-8",
-    "client-ref": "60bf22dee81e74537e6397c11c0fbce219ca99d2",
-    "client-version": "1.21.3",
+    "client-ref": "1d19063e681d13fad3185776a6f83cc1b3565626",
+    "client-version": "1.21.21",
     "x-clientplatform": "Windows",
-    "x-networkprotocolversion": 686,
+    "x-networkprotocolversion": "712",
     "content-type": "application/json",
     "user-agent": "MCPE/UWP",
     "Accept-Language": "en-US",
@@ -76,14 +76,10 @@ const realm_api_headers = {
     "Connection": "Keep-Alive"
 };
 
-const realmCodeRegex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11}/gm;
+const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11,15}/gm;
 
-(async () => {
-    const token = await getXboxToken();
-    const realmToken = await getRealmToken();
-
-    headers.Authorization = `XBL3.0 x=${token.userHash};${token.XSTSToken}`;
-    realm_api_headers.authorization = `XBL3.0 x=${realmToken.userHash};${realmToken.XSTSToken}`;
+(async() => {
+    await getTokens();
 
     const fetchCodes = async () => {
         try {
@@ -91,7 +87,7 @@ const realmCodeRegex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11}/gm;
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(body)
-            }).catch(() => {});
+            }).catch(() => { });
 
             const data = await posts.json();
 
@@ -100,7 +96,7 @@ const realmCodeRegex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11}/gm;
             for (let i = 0; i < data.results.length; i++) {
                 if (!data.results[i].relatedInfo?.description) continue;
 
-                const realmCodes = data.results[i].relatedInfo.description.text.match(realmCodeRegex);
+                const realmCodes = data.results[i].relatedInfo.description.text.match(regex);
 
                 if (realmCodes) {
                     for (let j = 0; j < realmCodes.length; j++) {
@@ -171,15 +167,19 @@ const realmCodeRegex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11}/gm;
 
                                 realmArray.push(realmCodes[j].toLowerCase());
                                 break;
+                            case 401:
+                                console.log(`[${chalk.blueBright(realmCodes[j])}] ${chalk.red("Unable to retrieve realm code, refreshing tokens.")}`);
+                                await getTokens();
+                                break;
                             default:
-                                console.log(`[${chalk.blueBright(realmCodes[j])}] ${chalk.red("Unable to retrieve Realm Code")}`);
+                                console.log(`[${chalk.blueBright(realmCodes[j])}] ${chalk.red("Unable to retrieve realm code")}`);
                                 break;
                         }
                     }
                 }
             };
 
-            console.log(`[${chalk.blueBright('-')}] ${chalk.yellow('Finished Grabbing Realm Codes')}`);
+            console.log(`[${chalk.blueBright('-')}] ${chalk.yellow('Finished Grabbing Realm Code(s)')}`);
         } catch (error) {
             console.log(error)
             console.log(`[${chalk.blueBright('-')}] ${chalk.red("Something went wrong")} (${error?.code})`);
@@ -198,7 +198,5 @@ const realmCodeRegex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11}/gm;
 
     fetchCodes();
 
-    setInterval(async () => { 
-        await fetchCodes();
-    }, 60000);
+    setInterval(() => { fetchCodes(); }, 60000);
 })();
