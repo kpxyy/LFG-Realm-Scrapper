@@ -87,7 +87,7 @@ const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11,15}/gm;
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(body)
-            }).catch(() => { });
+            }).catch(() => {});
 
             const data = await posts.json();
 
@@ -119,7 +119,7 @@ const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11,15}/gm;
                                     send({
                                         "embeds": [
                                             {
-                                                "description": `### New Realm Found\n**Name**: N/A\n**Code**: ${realmCodes[j]}`,
+                                                "description": `### New Realm Found\n**Code**: ${realmCodes[j]}`,
                                                 "color": 13210822,
                                                 "fields": [],
                                                 "author": {
@@ -169,7 +169,7 @@ const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11,15}/gm;
                                 break;
                             case 401:
                                 console.log(`[${chalk.blueBright(realmCodes[j])}] ${chalk.red("Unable to retrieve realm code, refreshing tokens.")}`);
-                                await getTokens();
+                                getTokens();
                                 break;
                             default:
                                 console.log(`[${chalk.blueBright(realmCodes[j])}] ${chalk.red("Unable to retrieve realm code")}`);
