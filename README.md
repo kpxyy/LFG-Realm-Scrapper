@@ -10,7 +10,8 @@ The first ever public Xbox Looking For Group realm scrapper.
 6. The script will output a list of realm codes every 60 seconds.
 
 ## Webhook
-If you want to setup a webhook, which isn't required, you have to make a .env file including a discord webhook URL. A example is provided below.
+If you want to setup a webhook, which is not required. You'll have to make a .env file including a discord webhook URL.
+
 `
 WEBHOOK_URL=WEBHOOK URL HERE
 `
