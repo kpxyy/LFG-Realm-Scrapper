@@ -8,7 +8,7 @@ The first ever public Xbox Looking For Group realm scrapper.
 4. Make a invaildRealms.json file with a empty array.
 5. Run the script with `node .`
 6. Link your Microsoft Account. (Requires you to make a Xbox Account)
-6. The script will output a list of realm codes every 60 seconds.
+7. The script will output a list of realm codes every 60 seconds.
 
 ## Webhook
 If you want to setup a webhook, which is not required. You'll have to make a .env file including a discord webhook URL.
