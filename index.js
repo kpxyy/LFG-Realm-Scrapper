@@ -1,8 +1,8 @@
 const { Authflow } = require("prismarine-auth");
 
-const fetch = require('node-fetch');
-const chalk = require('chalk');
-const fs = require('fs');
+const fetch = require("node-fetch");
+const chalk = require("chalk");
+const fs = require("fs");
 
 require("dotenv").config();
 
@@ -18,18 +18,18 @@ const flow = new Authflow(undefined, "./auth", {
 });
 
 const getTokens = async() => {
-    const token = await flow.getXboxToken().catch((err) => {
+    const xToken = await flow.getXboxToken().catch((err) => {
         console.log(err);
         process.exit(1);
     });
 
-    const realmToken = await flow.getXboxToken("https://pocket.realms.minecraft.net/").catch((err) => {
+    const rToken = await flow.getXboxToken("https://pocket.realms.minecraft.net/").catch((err) => {
         console.log(err);
         process.exit(1);
     });
 
-    headers.Authorization = `XBL3.0 x=${token.userHash};${token.XSTSToken}`;
-    realm_api_headers.authorization = `XBL3.0 x=${realmToken.userHash};${realmToken.XSTSToken}`;
+    headers.Authorization = `XBL3.0 x=${xToken.userHash};${xToken.XSTSToken}`;
+    realm_api_headers.Authorization = `XBL3.0 x=${rToken.userHash};${rToken.XSTSToken}`;
 
     return;
 }
@@ -45,24 +45,15 @@ function send(params) {
 }
 
 const headers = {
-    'x-xbl-contract-version': 107,
-    'Accept': 'application/json',
-    'Accept-Language': 'en-US',
-    'Authorization': ''
-};
-
-const body = {
-    'type': 'search',
-    'templateName': 'global(lfg)',
-    'orderBy': 'suggestedLfg desc',
-    'communicatePermissionRequired': true,
-    'includeScheduled': true,
-    'filter': `session/titleId eq 1828326430 and session/roles/lfg/confirmed/needs ge 1`
+    "x-xbl-contract-version": 107,
+    "Accept": "application/json",
+    "Accept-Language": "en-US",
+    "Authorization": ""
 };
 
 const realm_api_headers = {
     "Accept": "*/*",
-    "authorization": "",
+    "Authorization": "",
     "charset": "utf-8",
     "client-ref": "1d19063e681d13fad3185776a6f83cc1b3565626",
     "client-version": "1.21.21",
@@ -83,15 +74,22 @@ const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11,15}/gm;
 
     const fetchCodes = async () => {
         try {
-            const posts = await fetch(`https://sessiondirectory.xboxlive.com/handles/query?include=relatedInfo,roleInfo,activityInfo`, {
-                method: 'POST',
+            const posts = await fetch("https://sessiondirectory.xboxlive.com/handles/query?include=relatedInfo,roleInfo,activityInfo", {
+                method: "POST",
                 headers: headers,
-                body: JSON.stringify(body)
+                body: JSON.stringify({
+                    "type": "search",
+                    "templateName": "global(lfg)",
+                    "orderBy": "suggestedLfg desc",
+                    "communicatePermissionRequired": true,
+                    "includeScheduled": true,
+                    "filter": "session/titleId eq 1828326430 and session/roles/lfg/confirmed/needs ge 1"
+                })
             }).catch(() => {});
 
             const data = await posts.json();
 
-            console.log(`[${chalk.blueBright('-')}] ${chalk.yellow('Grabbing Realm Codes')}`);
+            console.log(`[${chalk.blueBright('-')}] ${chalk.yellow("Grabbing Realm Codes")}`);
 
             for (let i = 0; i < data.results.length; i++) {
                 if (!data.results[i].relatedInfo?.description) continue;
@@ -102,7 +100,7 @@ const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11,15}/gm;
                     for (let j = 0; j < realmCodes.length; j++) {
                         if (realmArray.includes(realmCodes[j].toLowerCase()) || invaildRealmArray.includes(realmCodes[j].toLowerCase())) continue;
 
-                        console.log(`[${chalk.blueBright(realmCodes[j])}] ${chalk.magenta('Vaildating Realm Code')}`);
+                        console.log(`[${chalk.blueBright(realmCodes[j])}] ${chalk.magenta("Vaildating Realm Code")}`);
 
                         const response = await fetch(`https://pocket.realms.minecraft.net/worlds/v1/link/${realmCodes[j]}`, {
                             method: "GET",
@@ -179,17 +177,17 @@ const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11,15}/gm;
                 }
             };
 
-            console.log(`[${chalk.blueBright('-')}] ${chalk.yellow('Finished Grabbing Realm Code(s)')}`);
+            console.log(`[${chalk.blueBright('-')}] ${chalk.yellow("Finished Grabbing Realm Code(s)")}`);
         } catch (error) {
             console.log(error)
             console.log(`[${chalk.blueBright('-')}] ${chalk.red("Something went wrong")} (${error?.code})`);
         }
 
-        fs.writeFileSync('realms.json', JSON.stringify(realmArray, null, 2), (err) => {
+        fs.writeFileSync("realms.json", JSON.stringify(realmArray, null, 2), (err) => {
             if (err) console.log(err);
         });
 
-        fs.writeFileSync('invaildRealms.json', JSON.stringify(invaildRealmArray, null, 2), (err) => {
+        fs.writeFileSync("invaildRealms.json", JSON.stringify(invaildRealmArray, null, 2), (err) => {
             if (err) console.log(err);
         });
 
@@ -197,6 +195,6 @@ const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11,15}/gm;
     };
 
     fetchCodes();
-
+    
     setInterval(() => { fetchCodes(); }, 60000);
 })();
