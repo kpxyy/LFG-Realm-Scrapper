@@ -55,10 +55,10 @@ const realm_api_headers = {
     "Accept": "*/*",
     "Authorization": "",
     "charset": "utf-8",
-    "client-ref": "1d19063e681d13fad3185776a6f83cc1b3565626",
-    "client-version": "1.21.21",
+    "client-ref": "ba679b04477907df14dcaa5c85dca16b6fd0afaf",
+    "client-version": "1.21.44",
     "x-clientplatform": "Windows",
-    "x-networkprotocolversion": "712",
+    "x-networkprotocolversion": "748",
     "content-type": "application/json",
     "user-agent": "MCPE/UWP",
     "Accept-Language": "en-US",
@@ -89,7 +89,7 @@ const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11,15}/gm;
 
             const data = await posts.json();
 
-            console.log(`[${chalk.blueBright('-')}] ${chalk.yellow("Grabbing Realm Codes")}`);
+            console.log(`[${chalk.blueBright('-')}] ${chalk.yellow("Grabbing Realm Code(s)")}`);
 
             for (let i = 0; i < data.results.length; i++) {
                 if (!data.results[i].relatedInfo?.description) continue;
@@ -98,7 +98,7 @@ const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11,15}/gm;
 
                 if (realmCodes) {
                     for (let j = 0; j < realmCodes.length; j++) {
-                        if (realmArray.includes(realmCodes[j].toLowerCase()) || invaildRealmArray.includes(realmCodes[j].toLowerCase())) continue;
+                        if (realmArray.includes(realmCodes[j]) || invaildRealmArray.includes(realmCodes[j])) continue;
 
                         console.log(`[${chalk.blueBright(realmCodes[j])}] ${chalk.magenta("Vaildating Realm Code")}`);
 
@@ -134,11 +134,11 @@ const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11,15}/gm;
                                 }
 
                                 // Since it's vaild, but the account is blacklisted
-                                realmArray.push(realmCodes[j].toLowerCase());
+                                realmArray.push(realmCodes[j]);
                                 break;
                             case 404:
                                 console.log(`[${chalk.blueBright(realmCodes[j])}] ${chalk.red("Invaild Realm Code")}`);
-                                invaildRealmArray.push(realmCodes[j].toLowerCase());
+                                invaildRealmArray.push(realmCodes[j]);
                                 break;
                             case 200:
                                 console.log(`[${chalk.blueBright(realmCodes[j])}] ${chalk.green("Vaild Realm Code")}`);
@@ -163,7 +163,7 @@ const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11,15}/gm;
                                     console.log(`[${chalk.blueBright(realmCodes[j])}] ${chalk.green("Webhook sent")}`);
                                 }
 
-                                realmArray.push(realmCodes[j].toLowerCase());
+                                realmArray.push(realmCodes[j]);
                                 break;
                             case 401:
                                 console.log(`[${chalk.blueBright(realmCodes[j])}] ${chalk.red("Unable to retrieve realm code, refreshing tokens.")}`);
