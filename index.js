@@ -111,31 +111,6 @@ const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11,15}/gm;
 
                         switch (response.status) {
                             case 403:
-                                console.log(`[${chalk.blueBright(realmCodes[j])}] ${chalk.red("Found in blocklist")}`);
-
-                                if (URL.length >= 100) {
-                                    send({
-                                        "embeds": [
-                                            {
-                                                "description": `### New Realm Found\n**Code**: ${realmCodes[j]}`,
-                                                "color": 13210822,
-                                                "fields": [],
-                                                "author": {
-                                                    "name": "Pig",
-                                                    "icon_url": "https://minecraftfaces.com/wp-content/bigfaces/big-pig-face.png"
-                                                }
-                                            }
-                                        ],
-                                        "username": "Pig",
-                                        "avatar_url": "https://minecraftfaces.com/wp-content/bigfaces/big-pig-face.png"
-                                    })
-
-                                    console.log(`[${chalk.blueBright(realmCodes[j])}] ${chalk.green("Webhook sent")}`);
-                                }
-
-                                // Since it's vaild, but the account is blacklisted
-                                realmArray.push(realmCodes[j]);
-                                break;
                             case 404:
                                 console.log(`[${chalk.blueBright(realmCodes[j])}] ${chalk.red("Invaild Realm Code")}`);
                                 invaildRealmArray.push(realmCodes[j]);
@@ -179,8 +154,8 @@ const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_-]{11,15}/gm;
 
             console.log(`[${chalk.blueBright('-')}] ${chalk.yellow("Finished Grabbing Realm Code(s)")}`);
         } catch (error) {
-            console.log(error)
-            console.log(`[${chalk.blueBright('-')}] ${chalk.red("Something went wrong")} (${error?.code})`);
+            console.log(error);
+            console.log(`[${chalk.blueBright('-')}] ${chalk.red("Something went wrong")} (${error?.code}) (${error?.type})`);
         }
 
         fs.writeFileSync("realms.json", JSON.stringify(realmArray, null, 2), (err) => {
